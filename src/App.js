@@ -16,11 +16,12 @@ function App() {
   ];
 
   const [products, setProducts] = useState(initValue);
-  const [clicked, setClicked] = useState({
+  const [formData, setFormData] = useState({
     id: '',
     name: '',
     price: '',
   });
+  const [clicked, setClicked] = useState(-1);
 
   return (
     <React.Fragment>
@@ -32,8 +33,14 @@ function App() {
             backgroundColor: '#cfe8fc',
             height: '100vh'
           }}>
-            <CreateProduct clicked={ clicked }/>
+            <CreateProduct
+              setProducts={ setProducts }
+              formData={ formData }
+              setFormData={ setFormData }
+              clicked={ clicked }/>
             <Products
+              setProducts={ setProducts }
+              setFormData={ setFormData }
               setClicked={ setClicked }
               data={ products }/>
           </Typography>
