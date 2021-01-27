@@ -1,11 +1,13 @@
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import axios from 'axios';
 
 function CreateProduct({
   clicked,
   formData,
   setFormData,
   setProducts,
+  products,
 }) {
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
@@ -15,13 +17,55 @@ function CreateProduct({
     });
   }
 
+  const onCreateProduct = () => {
+    const url = 'https://5f2d045b8085690016922b50.mockapi.io/todo-list/products';
+    axios({
+      url: url,
+      method: 'POST',
+      data: formData
+    })
+      .then((response) => {
+        const { data } = response;
+        setProducts([
+          ...products,
+          data,
+        ]);
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  }
+
+  const onUpdateProduct = () => {
+    const url = `https://5f2d045b8085690016922b50.mockapi.io/todo-list/products/${ products[clicked].id }`;
+    axios({
+      url: url,
+      method: 'PUT',
+      data: formData
+    })
+      .then((response) => {
+        const { data } = response;
+
+        setProducts((oldState) => {
+          return oldState.map((val, idx) => {
+            return idx == clicked ? data : val;
+          });
+        });
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  }
+
   const onSubmitHandler = (event) => {
     event.preventDefault();
-    setProducts((oldState) => {
-      return oldState.map((val, idx) => {
-        return idx == clicked ? formData : val;
-      });
-    });
+    if (clicked == -1) {
+      // Tạo mới
+      onCreateProduct();
+    } else {
+      // Cập nhật
+      onUpdateProduct();
+    }
   }
 
   return (
