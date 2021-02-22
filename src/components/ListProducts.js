@@ -12,14 +12,13 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import React from 'react';
 import axios from 'axios';
 
-function Products({
+function ListProducts({
   data,
   setClicked,
   setFormData,
   setProducts,
+  danhMucId,
 }) {
-  const [openDialog, setOpenDialog] = React.useState(false);
-
   const onClickHandler = (event, value, index) => {
     setClicked(index);
     setFormData(value);
@@ -27,7 +26,8 @@ function Products({
 
   const onDeleteProduct = (index) => {
     const id = data[index].id;
-    const url = 'https://5f2d045b8085690016922b50.mockapi.io/todo-list/products/' + id;
+    const url = 'https://5f2d045b8085690016922b50.mockapi.io/todo-list/categories/'
+      + danhMucId + '/products/' + id;
     axios({
       method: 'DELETE',
       url: url,
@@ -47,47 +47,16 @@ function Products({
     });
   }
 
-  let deleteRow = -1;
-
   const btnDeleteOnClick = (event, index) => {
-    setOpenDialog(true);
-    deleteRow = index;
-    console.log(deleteRow, index)
-  }
+    const confirmResult = window.confirm("Xóa?");
 
-  const closeDialog = (isDelete) => {
-    setOpenDialog(false);
-
-    console.log(isDelete, deleteRow)
-    if (isDelete == true && deleteRow != -1) {
-      onDeleteProduct(deleteRow)
+    if (confirmResult == true) {
+      onDeleteProduct(index);
     }
-
-    return isDelete;
   }
 
   return (
     <div>
-      <Dialog
-        open={openDialog}
-        onClose={ () => closeDialog(false) }
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description">
-        <DialogTitle>Xác nhận xóa?</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Bạn có muốn xóa bản ghi này?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={ () => closeDialog(false) } color="default">
-            Cancel
-          </Button>
-          <Button onClick={ () => closeDialog(true) } color="secondary" autoFocus>
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
       <Table>
         <TableHead>
           <TableRow>
@@ -128,4 +97,4 @@ function Products({
   );
 }
 
-export default Products;
+export default ListProducts;

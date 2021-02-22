@@ -8,6 +8,7 @@ function CreateProduct({
   setFormData,
   setProducts,
   products,
+  danhMucId,
 }) {
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
@@ -18,7 +19,8 @@ function CreateProduct({
   }
 
   const onCreateProduct = () => {
-    const url = 'https://5f2d045b8085690016922b50.mockapi.io/todo-list/products';
+    const url = 'https://5f2d045b8085690016922b50.mockapi.io/todo-list/categories/'
+      + danhMucId + '/products';
     axios({
       url: url,
       method: 'POST',
@@ -37,7 +39,7 @@ function CreateProduct({
   }
 
   const onUpdateProduct = () => {
-    const url = `https://5f2d045b8085690016922b50.mockapi.io/todo-list/products/${ products[clicked].id }`;
+    const url = `https://5f2d045b8085690016922b50.mockapi.io/todo-list/categories/${ danhMucId }/products/${ products[clicked].id }`;
     axios({
       url: url,
       method: 'PUT',
